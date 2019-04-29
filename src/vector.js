@@ -72,5 +72,11 @@ const Vector = {
             'x': vec1.x*(w1/wT) + vec2.x*(w2/wT),
             'y': vec1.y*(w1/wT) + vec2.y*(w2/wT)
         };
+    },
+    'interpolate': function(vec1, vec2, e) {
+        return {
+            'x': vec1.x*(1-e) + vec2.x*(e),
+            'y': vec1.y*(1-e) + vec2.y*(e)
+        };
     }
 };
