@@ -60,6 +60,12 @@ const Vector = {
             'y': vec1.y + vec2.y
         };
     },
+    'sub': function(vec1, vec2) {
+        return {
+            'x': vec1.x - vec2.x,
+            'y': vec1.y - vec2.y
+        };
+    },
     'multAdd': function(vec1, m1, vec2, m2) {
         return {
             'x': vec1.x*m1 + vec2.x*m2,
@@ -78,5 +84,17 @@ const Vector = {
             'x': vec1.x*(1-e) + vec2.x*(e),
             'y': vec1.y*(1-e) + vec2.y*(e)
         };
+    },
+    'wrap':function(vec, width, height) {
+        let result = {
+            'x': vec.x,
+            'y': vec.y
+        };
+        while( result.x < 0 ) result.x += width;
+        while( result.x > width) result.x -= width;
+
+        while( result.y < 0 ) result.y += height;
+        while( result.y > height ) result.y -= height;
+        return result;
     }
 };
