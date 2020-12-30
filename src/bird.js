@@ -1,27 +1,16 @@
-function distanceCost( d, size) {
-    x = d/size;
-    if (x > 10) return Math.exp(-x/4);
-    return (-(x-2)*(x-10))*Math.exp(-x/4)/4.5;
-}
-function distanceCostDir( d, size) {
-    x = d/size;
-    if (x > 10) return Math.exp(-x/4);
-    return (-(x)*(x-10))*Math.exp(-x/4)/10;
-}
-
 function sigma(d, size, L /*Max value*/, x0 /*centre*/, k /*steepness*/) {
     x = d/size;
     return L/(1+Math.exp(-k*(x-x0)));
 }
 
 const Bird = function(pos, vec, size, colour, name, 
-    seperation_settings, cohesion_settings, alignment_settings ) {
+    Separation_settings, cohesion_settings, alignment_settings ) {
     return {
         'Pos': pos,
         'Vec': vec,
         'Size': size,
         'Colour': colour,
-        'Seperation': seperation_settings,
+        'Separation': Separation_settings,
         'Cohesion': cohesion_settings,
         'Alignment': alignment_settings,
         'Name': name,
@@ -50,23 +39,23 @@ const Bird = function(pos, vec, size, colour, name,
         'sigmas': function(otherBird) {
             let d = this.distance(otherBird.Pos);
 
-            seperation_sigma = sigma(d, this.Size, 1, this.Seperation.r, this.Seperation.k);
+            Separation_sigma = sigma(d, this.Size, 1, this.Separation.r, this.Separation.k);
             cohesion_sigma = sigma(d, this.Size, 1, this.Cohesion.r, this.Cohesion.k);
             alignment_sigma = sigma(d, this.Size, 1, this.Alignment.r, this.Alignment.k);
 
-            return [seperation_sigma, cohesion_sigma, alignment_sigma];
+            return [Separation_sigma, cohesion_sigma, alignment_sigma];
         },
-        'accumulate': function(seperation_total, seperation_centre,
+        'accumulate': function(Separation_total, Separation_centre,
             cohesion_total, cohesion_centre,
             alignment_total, alignment_centre, alignment_vector) {
 
-            seperation_centre = Vector.mult(seperation_centre, 1/seperation_total);
+            Separation_centre = Vector.mult(Separation_centre, 1/Separation_total);
             cohesion_centre = Vector.mult(cohesion_centre, 1/cohesion_total);
             alignment_centre = Vector.mult(alignment_centre, 1/alignment_total);
 
-            let seperation_vector = Vector.norm(Vector.sub(this.Pos, seperation_centre));
-            let seperation_distance = this.distance(seperation_centre);
-            let seperation_sigma = sigma(seperation_distance, this.Size, 1, this.Seperation.r, this.Seperation.k);
+            let Separation_vector = Vector.norm(Vector.sub(this.Pos, Separation_centre));
+            let Separation_distance = this.distance(Separation_centre);
+            let Separation_sigma = sigma(Separation_distance, this.Size, 1, this.Separation.r, this.Separation.k);
 
             let cohesion_vector = Vector.norm(Vector.sub(cohesion_centre, this.Pos));
             let cohesion_distance = this.distance(cohesion_centre);
@@ -79,7 +68,7 @@ const Bird = function(pos, vec, size, colour, name,
 
             this.Vec = Vector.norm(
                 Vector.multAdd(this.Vec, 1, 
-                    Vector.multAdd(seperation_vector, this.Seperation.w*seperation_sigma, 
+                    Vector.multAdd(Separation_vector, this.Separation.w*Separation_sigma, 
                         Vector.multAdd(cohesion_vector, this.Cohesion.w*cohesion_sigma, 
                             alignment_vector, this.Alignment.w*alignment_sigma),
                         1),
