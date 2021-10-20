@@ -77,5 +77,4 @@ const Bird = function(pos, vec, size, colour, name,
 
         }
     };
-
 };
